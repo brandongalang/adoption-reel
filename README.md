@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TaskRabbit AI Enablement — portfolio prototype
 
-## Getting Started
+Next.js prototype for an internal **AI enablement hub** (employee-facing) and narrative walkthrough of a **bottom-up + leadership visibility** (“barbell”) adoption model. Built as a take-home / interview portfolio piece.
 
-First, run the development server:
+## What’s in the repo
+
+- **Main app** — `src/app/page.tsx`: hub UI, walkthrough, and mock data for adoption health, champions, and leadership-style summaries.
+- **Static leadership dashboard** — `public/leadership-dashboard.html`: single-file HTML/CSS/JS dashboard (open directly in a browser or via `/leadership-dashboard.html` when running Next).
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install   # or npm install
+bun dev       # or npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- App: [http://localhost:3000](http://localhost:3000)
+- Static dashboard: [http://localhost:3000/leadership-dashboard.html](http://localhost:3000/leadership-dashboard.html)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run build && bun run start
+```
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn-style UI primitives.

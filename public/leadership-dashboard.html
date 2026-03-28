@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskRabbit · AI Enablement Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f2f5;
+      --muted: #8892a0;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --accent3: #ff6b6b;
+      --accent4: #fbbf24;
+      --green: #22c55e;
+      --red: #ef4444;
+      --tr-orange: #ff6b35;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── TOP NAV ─── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,12,16,0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      background: var(--tr-orange);
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+    .nav-title { font-size: 14px; color: var(--muted); }
+    .nav-title span { color: var(--text); font-weight: 600; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .pill {
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .pill.live { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: var(--green); }
+    .pill.live::before { content: '● '; font-size: 8px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: white;
+    }
+
+    /* ─── LAYOUT ─── */
+    .main { display: flex; }
+    .sidebar {
+      width: 220px;
+      min-height: calc(100vh - 57px);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      flex-shrink: 0;
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 0 20px 10px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .nav-item.active {
+      color: var(--text);
+      background: rgba(108,99,255,0.08);
+      border-left-color: var(--accent);
+      font-weight: 500;
+    }
+    .nav-item:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+
+    .content { flex: 1; padding: 28px 32px; overflow-y: auto; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 700; }
+    .page-header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .header-controls { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .btn:hover { background: var(--surface); border-color: rgba(255,255,255,0.15); }
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+    .btn.primary:hover { background: #7c75ff; }
+    .date-badge {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+    }
+
+    /* ─── KPI CARDS ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .kpi-card.purple::before { background: linear-gradient(90deg, var(--accent), transparent); }
+    .kpi-card.teal::before { background: linear-gradient(90deg, var(--accent2), transparent); }
+    .kpi-card.orange::before { background: linear-gradient(90deg, var(--tr-orange), transparent); }
+    .kpi-card.yellow::before { background: linear-gradient(90deg, var(--accent4), transparent); }
+
+    .kpi-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .kpi-value { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+    .kpi-value.purple { color: var(--accent); }
+    .kpi-value.teal { color: var(--accent2); }
+    .kpi-value.orange { color: var(--tr-orange); }
+    .kpi-value.yellow { color: var(--accent4); }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 6px;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .kpi-sub.neg { color: var(--red); }
+    .kpi-sub .muted { color: var(--muted); font-weight: 400; }
+    .kpi-sparkline { margin-top: 12px; height: 36px; }
+
+    /* ─── SECTION GRID ─── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .card-title { font-size: 14px; font-weight: 600; }
+    .card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .card-badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 100px;
+    }
+    .badge-green { background: rgba(34,197,94,0.12); color: var(--green); }
+    .badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
+    .badge-purple { background: rgba(108,99,255,0.15); color: var(--accent); }
+    .badge-orange { background: rgba(255,107,53,0.15); color: var(--tr-orange); }
+
+    /* ─── AI INSIGHT FEED ─── */
+    .insight-list { display: flex; flex-direction: column; gap: 10px; }
+    .insight-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+    .insight-item:hover { border-color: rgba(255,255,255,0.12); }
+    .insight-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .insight-icon.warn { background: rgba(251,191,36,0.15); }
+    .insight-icon.good { background: rgba(34,197,94,0.12); }
+    .insight-icon.info { background: rgba(108,99,255,0.15); }
+    .insight-icon.alert { background: rgba(239,68,68,0.12); }
+    .insight-body { flex: 1; }
+    .insight-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+    .insight-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .insight-meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .insight-action {
+      font-size: 11px;
+      color: var(--accent);
+      cursor: pointer;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .insight-action:hover { text-decoration: underline; }
+
+    /* ─── OPPORTUNITY TABLE ─── */
+    .opp-table { width: 100%; border-collapse: collapse; }
+    .opp-table thead th {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      text-align: left;
+      padding: 0 0 10px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .opp-table tbody td {
+      font-size: 13px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+    .opp-table tbody tr:last-child td { border-bottom: none; }
+    .opp-name { font-weight: 500; }
+    .opp-category { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .effort-bar {
+      width: 80px; height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .effort-fill { height: 100%; border-radius: 3px; }
+    .effort-low { background: var(--green); }
+    .effort-med { background: var(--accent4); }
+    .effort-high { background: var(--red); }
+    .impact-label { font-size: 12px; font-weight: 600; }
+    .impact-high { color: var(--green); }
+    .impact-med { color: var(--accent4); }
+
+    /* ─── MODEL HEALTH ─── */
+    .model-list { display: flex; flex-direction: column; gap: 12px; }
+    .model-item { display: flex; flex-direction: column; gap: 6px; }
+    .model-header { display: flex; align-items: center; justify-content: space-between; }
+    .model-name { font-size: 13px; font-weight: 500; }
+    .model-score { font-size: 13px; font-weight: 700; }
+    .progress-bar {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+    }
+    .model-meta { font-size: 11px; color: var(--muted); }
+
+    /* ─── TASKER SENTIMENT ─── */
+    .sentiment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .sentiment-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .sentiment-emoji { font-size: 22px; margin-bottom: 6px; }
+    .sentiment-pct { font-size: 20px; font-weight: 700; }
+    .sentiment-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ─── ADOPTION TRACKER ─── */
+    .adoption-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .adoption-info { flex: 1; }
+    .adoption-name { font-size: 13px; font-weight: 500; }
+    .adoption-team { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .adoption-bar-wrap { flex: 1; margin: 0 14px; }
+    .adoption-pct { font-size: 13px; font-weight: 600; color: var(--accent); min-width: 36px; text-align: right; }
+
+    /* ─── BOTTOM STRIP ─── */
+    .strip {
+      margin-top: 8px;
+      background: rgba(108,99,255,0.06);
+      border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .strip-icon { font-size: 20px; }
+    .strip-text { flex: 1; font-size: 13px; }
+    .strip-text strong { color: var(--accent); }
+    .strip-cta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      border: 1px solid rgba(108,99,255,0.4);
+      border-radius: 6px;
+      padding: 6px 12px;
+      transition: background 0.15s;
+    }
+    .strip-cta:hover { background: rgba(108,99,255,0.12); }
+
+    /* ─── TABS ─── */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .tab.active {
+      color: var(--text);
+      background: var(--surface2);
+      border-color: var(--border);
+    }
+    .tab:hover:not(.active) { color: var(--text); }
+
+    /* ─── CHART CONTAINERS ─── */
+    .chart-wrap { position: relative; height: 190px; }
+    .chart-wrap-sm { position: relative; height: 140px; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .kpi-card, .card { animation: fadeUp 0.4s ease both; }
+    .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.10s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.20s; }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo">TR</div>
+    <div class="nav-title"><span>AI Enablement</span> · Executive Dashboard</div>
+  </div>
+  <div class="nav-right">
+    <span class="pill live">Live</span>
+    <span class="pill">Q1 2025</span>
+    <div class="avatar">BG</div>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <div class="nav-item active"><span class="nav-icon">⚡</span> AI Pulse</div>
+      <div class="nav-item"><span class="nav-icon">📊</span> Business Impact</div>
+      <div class="nav-item"><span class="nav-icon">🧠</span> Model Health</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Initiatives</div>
+      <div class="nav-item"><span class="nav-icon">🎯</span> Smart Matching</div>
+      <div class="nav-item"><span class="nav-icon">💬</span> AI Support</div>
+      <div class="nav-item"><span class="nav-icon">💰</span> Dynamic Pricing</div>
+      <div class="nav-item"><span class="nav-icon">🔍</span> Fraud Detection</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Roadmap</div>
+      <div class="nav-item"><span class="nav-icon">📋</span> Opportunities</div>
+      <div class="nav-item"><span class="nav-icon">📣</span> Adoption</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div>
+        <h1>AI Pulse Dashboard</h1>
+        <p>Real-time visibility into AI initiatives, performance, and ROI · TaskRabbit</p>
+      </div>
+      <div class="header-controls">
+        <div class="date-badge">📅 Mar 6, 2025 · 14:01 EST</div>
+        <button class="btn">Export</button>
+        <button class="btn primary">+ New Initiative</button>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card purple">
+        <div class="kpi-label">AI MATCH RATE</div>
+        <div class="kpi-value purple">87.3%</div>
+        <div class="kpi-sub">↑ +4.2% <span class="muted">vs last quarter</span></div>
+        <canvas class="kpi-sparkline" id="spark1"></canvas>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-label">COST SAVED (AI DEFLECTION)</div>
+        <div class="kpi-value teal">$1.2M</div>
+        <div class="kpi-sub">↑ +18% <span class="muted">YoY annualized</span></div>
+        <canvas class="kpi-sparkline" id="spark2"></canvas>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-label">TASKS BOOKED VIA AI ASSIST</div>
+        <div class="kpi-value orange">34K</div>
+        <div class="kpi-sub">↑ +9.1% <span class="muted">vs last quarter</span></div>
+        <canvas class="kpi-sparkline" id="spark3"></canvas>
+      </div>
+      <div class="kpi-card yellow">
+        <div class="kpi-label">SUPPORT TICKETS DEFLECTED</div>
+        <div class="kpi-value yellow">63%</div>
+        <div class="kpi-sub neg">↓ -1.4% <span class="muted">vs last week</span></div>
+        <canvas class="kpi-sparkline" id="spark4"></canvas>
+      </div>
+    </div>
+
+    <!-- ROW 1 -->
+    <div class="grid-3">
+      <!-- Booking Trend -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">AI-Assisted Booking Trend</div>
+            <div class="card-sub">Weekly tasks booked with AI matching vs manual</div>
+          </div>
+          <div class="tabs">
+            <div class="tab active">12W</div>
+            <div class="tab">6M</div>
+            <div class="tab">1Y</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="bookingChart"></canvas></div>
+      </div>
+
+      <!-- Model Health -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Model Health</div>
+          <span class="card-badge badge-green">2 healthy · 1 watch</span>
+        </div>
+        <div class="model-list">
+          <div class="model-item">
+            <div class="model-header">
+              <div class="model-name">Tasker Match Engine</div>
+              <div class="model-score" style="color:var(--green)">94%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:94%;background:var(--green)"></div>
+            </div>
+            <div class="model-meta">Precision · Updated 2h ago</div>
+          </div>
+          <div class="model-item">
+            <div class="model-header">
+              <div class="model-name">Dynamic Pricing Model</div>
+              <div class="model-score" style="color:var(--accent)">81%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:81%;background:var(--accent)"></div>
+            </div>
+            <div class="model-meta">Accuracy (holdout) · Updated 6h ago</div>
+          </div>
+          <div class="model-item">
+            <div class="model-header">
+              <div class="model-name">CS Deflection Agent</div>
+              <div class="model-score" style="color:var(--accent4)">67%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:67%;background:var(--accent4)"></div>
+            </div>
+            <div class="model-meta">Resolution rate · ⚠️ Needs review</div>
+          </div>
+          <div class="model-item">
+            <div class="model-header">
+              <div class="model-name">Fraud Detection</div>
+              <div class="model-score" style="color:var(--green)">99.1%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:99%;background:var(--green)"></div>
+            </div>
+            <div class="model-meta">Recall · Updated 30m ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="grid-2">
+      <!-- AI Insights Feed -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🤖 AI Insights Feed</div>
+            <div class="card-sub">Proactive signals surfaced by AI · Last 24h</div>
+          </div>
+          <span class="card-badge badge-purple">5 new</span>
+        </div>
+        <div class="insight-list">
+          <div class="insight-item">
+            <div class="insight-icon warn">⚠️</div>
+            <div class="insight-body">
+              <div class="insight-title">Tasker supply gap detected — NYC high demand</div>
+              <div class="insight-desc">Demand up 23% for home cleaning in Manhattan this week. Current supply coverage: 71%. AI suggests proactive outreach to 840 dormant taskers.</div>
+              <div class="insight-meta">🕐 2h ago · Smart Matching</div>
+              <div class="insight-action">→ View tasker list</div>
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon good">✅</div>
+            <div class="insight-body">
+              <div class="insight-title">Dynamic pricing uplift: +$34K this week</div>
+              <div class="insight-desc">AI-driven surge pricing in plumbing category drove 8.4% higher revenue per booking without a measurable drop in conversion.</div>
+              <div class="insight-meta">🕐 6h ago · Pricing AI</div>
+              <div class="insight-action">→ View pricing report</div>
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon alert">🔴</div>
+            <div class="insight-body">
+              <div class="insight-title">CS deflection rate dropped 1.4% this week</div>
+              <div class="insight-desc">Spike in "reschedule" intents not handled by current AI agent. Root cause: new edge cases from holiday booking surge. Recommend fine-tuning pass.</div>
+              <div class="insight-meta">🕐 12h ago · AI Support</div>
+              <div class="insight-action">→ Open model re-training ticket</div>
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon info">💡</div>
+            <div class="insight-body">
+              <div class="insight-title">Opportunity: AI review summarization</div>
+              <div class="insight-desc">Analysis of 12K reviews shows 3 recurring quality signals invisible to current 5-star system. A summary layer could increase booking confidence for new clients.</div>
+              <div class="insight-meta">🕐 1d ago · Trust & Safety</div>
+              <div class="insight-action">→ Add to roadmap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity Pipeline -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">📋 AI Opportunity Pipeline</div>
+            <div class="card-sub">Prioritized by impact vs. effort</div>
+          </div>
+          <span class="card-badge badge-orange">6 items</span>
+        </div>
+        <table class="opp-table">
+          <thead>
+            <tr>
+              <th>Initiative</th>
+              <th>Impact</th>
+              <th>Effort</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="opp-name">Smart rebooking nudges</div>
+                <div class="opp-category">Retention · LLM + CRM</div>
+              </td>
+              <td><span class="impact-label impact-high">🔥 High</span></td>
+              <td><div class="effort-bar"><div class="effort-fill effort-low" style="width:30%"></div></div></td>
+              <td><span class="card-badge badge-green">In flight</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="opp-name">AI task scoping assistant</div>
+                <div class="opp-category">Conversion · Chat UI</div>
+              </td>
+              <td><span class="impact-label impact-high">🔥 High</span></td>
+              <td><div class="effort-bar"><div class="effort-fill effort-med" style="width:55%"></div></div></td>
+              <td><span class="card-badge badge-purple">Planning</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="opp-name">Tasker earnings forecaster</div>
+                <div class="opp-category">Supply · Prediction</div>
+              </td>
+              <td><span class="impact-label impact-med">📈 Med</span></td>
+              <td><div class="effort-bar"><div class="effort-fill effort-med" style="width:50%"></div></div></td>
+              <td><span class="card-badge badge-purple">Planning</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="opp-name">AI review summarization</div>
+                <div class="opp-category">Trust · NLP</div>
+              </td>
+              <td><span class="impact-label impact-high">🔥 High</span></td>
+              <td><div class="effort-bar"><div class="effort-fill effort-low" style="width:25%"></div></div></td>
+              <td><span class="card-badge badge-orange">Backlog</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="opp-name">No-show risk predictor</div>
+                <div class="opp-category">Operations · ML</div>
+              </td>
+              <td><span class="impact-label impact-high">🔥 High</span></td>
+              <td><div class="effort-bar"><div class="effort-fill effort-high" style="width:75%"></div></div></td>
+              <td><span class="card-badge badge-orange">Backlog</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="grid-2">
+      <!-- Adoption -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📣 AI Tool Adoption by Team</div>
+          <span class="card-badge badge-purple">Internal Tools</span>
+        </div>
+        <div>
+          <div class="adoption-row">
+            <div class="adoption-info">
+              <div class="adoption-name">AI Scheduling Assist</div>
+              <div class="adoption-team">Ops · 240 users</div>
+            </div>
+            <div class="adoption-bar-wrap">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:82%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+              </div>
+            </div>
+            <div class="adoption-pct">82%</div>
+          </div>
+          <div class="adoption-row">
+            <div class="adoption-info">
+              <div class="adoption-name">AI Reply Drafts (CS)</div>
+              <div class="adoption-team">Customer Support · 85 agents</div>
+            </div>
+            <div class="adoption-bar-wrap">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:74%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+              </div>
+            </div>
+            <div class="adoption-pct">74%</div>
+          </div>
+          <div class="adoption-row">
+            <div class="adoption-info">
+              <div class="adoption-name">Copilot for Data Queries</div>
+              <div class="adoption-team">Analytics · 32 users</div>
+            </div>
+            <div class="adoption-bar-wrap">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:61%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+              </div>
+            </div>
+            <div class="adoption-pct">61%</div>
+          </div>
+          <div class="adoption-row">
+            <div class="adoption-info">
+              <div class="adoption-name">AI Performance Summarizer</div>
+              <div class="adoption-team">Leadership · 18 users</div>
+            </div>
+            <div class="adoption-bar-wrap">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:44%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+              </div>
+            </div>
+            <div class="adoption-pct">44%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client + Tasker Sentiment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">😊 AI-Driven Experience Sentiment</div>
+          <span class="card-badge badge-green">NPS +42</span>
+        </div>
+        <div class="sentiment-grid">
+          <div class="sentiment-box">
+            <div class="sentiment-emoji">😊</div>
+            <div class="sentiment-pct" style="color:var(--green)">71%</div>
+            <div class="sentiment-label">Positive</div>
+          </div>
+          <div class="sentiment-box">
+            <div class="sentiment-emoji">😐</div>
+            <div class="sentiment-pct" style="color:var(--accent4)">21%</div>
+            <div class="sentiment-label">Neutral</div>
+          </div>
+          <div class="sentiment-box">
+            <div class="sentiment-emoji">😞</div>
+            <div class="sentiment-pct" style="color:var(--red)">8%</div>
+            <div class="sentiment-label">Negative</div>
+          </div>
+        </div>
+        <div class="chart-wrap-sm"><canvas id="sentimentChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM STRIP -->
+    <div class="strip">
+      <div class="strip-icon">🧠</div>
+      <div class="strip-text">
+        <strong>AI Weekly Digest ready</strong> — GPT-4o analyzed 38,400 task completions, 12K reviews, and 6 model performance logs. Summary: <strong>AI is driving +$1.4M in annualized value</strong> this quarter. Three initiatives ready for exec sign-off.
+      </div>
+      <div class="strip-cta">Read full digest →</div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ─── SPARKLINES ───
+  function makeSparkline(id, data, color) {
+    const ctx = document.getElementById(id).getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map((_, i) => i),
+        datasets: [{ data, borderColor: color, borderWidth: 2, pointRadius: 0, tension: 0.4,
+          fill: true, backgroundColor: color + '18' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { x: { display: false }, y: { display: false } },
+        animation: { duration: 800, easing: 'easeInOutQuart' }
+      }
+    });
+  }
+  makeSparkline('spark1', [78,80,81,83,82,84,85,86,87,87.3], '#6c63ff');
+  makeSparkline('spark2', [820,870,920,960,1000,1050,1100,1140,1180,1200], '#00d4aa');
+  makeSparkline('spark3', [24,26,27,28,29,30,31,32,33,34], '#ff6b35');
+  makeSparkline('spark4', [65,67,66,68,67,66,65,64,63,63], '#fbbf24');
+
+  // ─── BOOKING TREND ───
+  const weeks = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
+  new Chart(document.getElementById('bookingChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: weeks,
+      datasets: [
+        {
+          label: 'AI-Matched',
+          data: [18,20,21,23,24,25,27,28,29,31,33,34],
+          backgroundColor: 'rgba(108,99,255,0.7)',
+          borderRadius: 4,
+          borderSkipped: false
+        },
+        {
+          label: 'Manual',
+          data: [12,11,11,10,10,9,9,8,8,7,7,6],
+          backgroundColor: 'rgba(255,107,53,0.4)',
+          borderRadius: 4,
+          borderSkipped: false
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: '#8892a0', font: { size: 11, family: 'Inter' }, boxWidth: 12 }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#8892a0', font: { size: 11, family: 'Inter' } },
+             grid: { display: false }, stacked: false },
+        y: { ticks: { color: '#8892a0', font: { size: 11, family: 'Inter' }, callback: v => v + 'K' },
+             grid: { color: 'rgba(255,255,255,0.04)' } }
+      },
+      animation: { duration: 1000, easing: 'easeInOutQuart' }
+    }
+  });
+
+  // ─── SENTIMENT TREND ───
+  new Chart(document.getElementById('sentimentChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+      datasets: [
+        { label: 'Positive', data: [62,64,65,66,69,71], borderColor: '#22c55e', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#22c55e', tension: 0.4, fill: false },
+        { label: 'Negative', data: [14,13,12,11,10,8], borderColor: '#ef4444', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#ef4444', tension: 0.4, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8892a0', font: { size: 11, family: 'Inter' }, boxWidth: 10 } }
+      },
+      scales: {
+        x: { ticks: { color: '#8892a0', font: { size: 11 } }, grid: { display: false } },
+        y: { ticks: { color: '#8892a0', font: { size: 11 }, callback: v => v + '%' },
+             grid: { color: 'rgba(255,255,255,0.04)' }, min: 0, max: 100 }
+      },
+      animation: { duration: 1000 }
+    }
+  });
+</script>
+</body>
+</html>
