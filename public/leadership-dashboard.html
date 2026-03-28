@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TaskRabbit · AI Enablement Dashboard</title>
+  <title>Meridian · AI Enablement Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -21,7 +21,7 @@
       --accent4: #fbbf24;
       --green: #22c55e;
       --red: #ef4444;
-      --tr-orange: #ff6b35;
+      --brand-accent: #ff6b35;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -47,7 +47,7 @@
     }
     .nav-left { display: flex; align-items: center; gap: 12px; }
     .logo {
-      background: var(--tr-orange);
+      background: var(--brand-accent);
       color: white;
       font-weight: 800;
       font-size: 13px;
@@ -181,14 +181,14 @@
     }
     .kpi-card.purple::before { background: linear-gradient(90deg, var(--accent), transparent); }
     .kpi-card.teal::before { background: linear-gradient(90deg, var(--accent2), transparent); }
-    .kpi-card.orange::before { background: linear-gradient(90deg, var(--tr-orange), transparent); }
+    .kpi-card.orange::before { background: linear-gradient(90deg, var(--brand-accent), transparent); }
     .kpi-card.yellow::before { background: linear-gradient(90deg, var(--accent4), transparent); }
 
     .kpi-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; margin-bottom: 10px; }
     .kpi-value { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
     .kpi-value.purple { color: var(--accent); }
     .kpi-value.teal { color: var(--accent2); }
-    .kpi-value.orange { color: var(--tr-orange); }
+    .kpi-value.orange { color: var(--brand-accent); }
     .kpi-value.yellow { color: var(--accent4); }
     .kpi-sub {
       font-size: 12px;
@@ -226,7 +226,7 @@
     .badge-green { background: rgba(34,197,94,0.12); color: var(--green); }
     .badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
     .badge-purple { background: rgba(108,99,255,0.15); color: var(--accent); }
-    .badge-orange { background: rgba(255,107,53,0.15); color: var(--tr-orange); }
+    .badge-orange { background: rgba(255,107,53,0.15); color: var(--brand-accent); }
 
     /* ─── AI INSIGHT FEED ─── */
     .insight-list { display: flex; flex-direction: column; gap: 10px; }
@@ -461,7 +461,7 @@
     <div class="page-header">
       <div>
         <h1>AI Pulse Dashboard</h1>
-        <p>Real-time visibility into AI initiatives, performance, and ROI · TaskRabbit</p>
+        <p>Real-time visibility into AI initiatives, performance, and ROI · Meridian</p>
       </div>
       <div class="header-controls">
         <div class="date-badge">📅 Mar 6, 2025 · 14:01 EST</div>

@@ -10,8 +10,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "TaskRabbit AI Enablement Hub",
-  description: "TaskRabbit Internal AI Portal",
+  title: "Meridian AI Enablement Hub",
+  description: "Fictional internal AI enablement portal (portfolio prototype)",
 };
 
 export default function RootLayout({

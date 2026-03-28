@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "taskrabbit-ai-portal",
+      "name": "meridian-enablement-prototype",
       "dependencies": {
         "@base-ui/react": "^1.2.0",
         "class-variance-authority": "^0.7.1",

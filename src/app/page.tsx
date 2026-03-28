@@ -195,7 +195,7 @@ export default function AIPortal() {
               <Sparkles className="h-5 w-5" />
             </div>
             <span className="text-xl font-medium tracking-tight text-sidebar-primary">
-              taskrabbit <span className="font-semibold">AI Hub</span>
+              Meridian <span className="font-semibold">AI Hub</span>
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -327,19 +327,19 @@ function EmployeeView({
     {
       initials: "PM", name: "Priya M.", role: "Finance", badge: "Mar 5 Power Hour",
       title: "\"How I automated 3 hours of month-end close in 10 minutes\"",
-      body: "Priya used Gemini + a custom Google Apps Script to pull budget actuals, flag variances, and draft the CFO summary automatically — without touching a spreadsheet. She reduced month-end forecast prep from 4 hours to 20 minutes.",
+      body: "Priya used Helix + a spreadsheet automation script to pull budget actuals, flag variances, and draft the CFO summary automatically — without touching a spreadsheet. She reduced month-end forecast prep from 4 hours to 20 minutes.",
       boldPhrase: "4 hours to 20 minutes",
     },
     {
       initials: "MT", name: "Marcus T.", role: "Customer Experience", badge: "Mar 4 Power Hour",
       title: "\"40+ extra tickets closed on our best Tuesday ever\"",
-      body: "Marcus set up Gemini to draft reply templates based on ticket context. The CX team used those drafts to cut copy-paste time and close 40+ more tickets than their previous record — with no extra headcount.",
+      body: "Marcus set up Helix to draft reply templates based on ticket context. The CX team used those drafts to cut copy-paste time and close 40+ more tickets than their previous record — with no extra headcount.",
       boldPhrase: "40+ more tickets",
     },
     {
       initials: "SK", name: "Sarah K.", role: "Product Ops", badge: "Mar 2 Power Hour",
-      title: "\"Vibe-coded our entire Tasker onboarding copy in one sitting\"",
-      body: "Sarah prompted Gemini with TaskRabbit brand guidelines, Tasker ICP notes, and tone examples. First draft of a full onboarding email sequence landed in under 10 minutes — ready for editing, not starting from scratch.",
+      title: "\"Vibe-coded our entire field-partner onboarding copy in one sitting\"",
+      body: "Sarah prompted Helix with Meridian brand guidelines, field-operations ICP notes, and tone examples. First draft of a full onboarding email sequence landed in under 10 minutes — ready for editing, not starting from scratch.",
       boldPhrase: "under 10 minutes",
     },
   ];
@@ -391,9 +391,9 @@ function EmployeeView({
                 <div className="p-2 bg-white animate-in slide-in-from-top-2 fade-in duration-200">
                   <div className="space-y-0.5">
                     {[
-                      { title: "Read the AI @ TaskRabbit Policy", done: true },
+                      { title: "Read the AI @ Meridian Policy", done: true },
                       { title: "Watch the 5-min intro video", done: true },
-                      { title: "Log in to Gemini Enterprise", done: true },
+                      { title: "Log in to Helix Enterprise", done: true },
                       { title: "Run your first agentic workflow", done: false, active: true },
                       { title: "Share a win in #ai-wins", done: false },
                     ].map((step, i) => (
@@ -560,8 +560,8 @@ function EmployeeView({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { emoji: "🎯", title: "Write Prompts That Actually Work", time: "5 min read", level: "Beginner", levelColor: "text-primary bg-primary/10" },
-            { emoji: "⚙️", title: "Build Your First AI Workflow with Gemini", time: "15 min walkthrough", level: "Intermediate", levelColor: "text-chart-3 bg-chart-3/10" },
-            { emoji: "🧑‍💻", title: "Set Up Augment in VS Code", time: "10 min setup", level: "For Engineers", levelColor: "text-chart-2 bg-chart-2/10" },
+            { emoji: "⚙️", title: "Build Your First AI Workflow with Helix", time: "15 min walkthrough", level: "Intermediate", levelColor: "text-chart-3 bg-chart-3/10" },
+            { emoji: "🧑‍💻", title: "Set Up Forge in VS Code", time: "10 min setup", level: "For Engineers", levelColor: "text-chart-2 bg-chart-2/10" },
           ].map((guide, i) => (
             <Card key={i} className="border-border shadow-sm hover:shadow-md transition-all cursor-pointer group">
               <CardContent className="p-5">
@@ -594,9 +594,9 @@ function EmployeeView({
             <CardContent className="p-4">
               <div className="space-y-2">
                 {[
-                  { name: "Gemini", desc: "Chat & writing", icon: MessageSquare, tag: "Everyone" },
-                  { name: "Augment", desc: "Code assist", icon: Terminal, tag: "Engineers" },
-                  { name: "Figma AI", desc: "Design", icon: Layers, tag: "Design" },
+                  { name: "Helix", desc: "Chat & writing", icon: MessageSquare, tag: "Everyone" },
+                  { name: "Forge", desc: "Code assist", icon: Terminal, tag: "Engineers" },
+                  { name: "Design Assistant", desc: "Design", icon: Layers, tag: "Design" },
                 ].map((tool, i) => (
                   <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors group">
                     <div className="p-2 rounded-lg bg-primary/8 text-primary">
@@ -618,11 +618,11 @@ function EmployeeView({
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-chart-3 mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold mb-1.5">AI @ TaskRabbit Policy</p>
+                  <p className="text-sm font-semibold mb-1.5">AI @ Meridian Policy</p>
                   <ul className="text-[12px] text-muted-foreground space-y-1.5">
-                    <li className="flex gap-1.5"><CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" /> Use Gemini, Augment, Figma AI</li>
+                    <li className="flex gap-1.5"><CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" /> Use Helix, Forge, Design Assistant</li>
                     <li className="flex gap-1.5"><CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" /> New tools? Submit via /ai-idea first</li>
-                    <li className="flex gap-1.5"><AlertCircle className="w-3 h-3 text-chart-3 mt-0.5 shrink-0" /> Never paste customer PII or Tasker data</li>
+                    <li className="flex gap-1.5"><AlertCircle className="w-3 h-3 text-chart-3 mt-0.5 shrink-0" /> Never paste customer PII or field-operations data</li>
                   </ul>
                   <Button variant="ghost" size="sm" className="mt-3 h-7 text-xs text-chart-3 hover:text-chart-3/80 hover:bg-chart-3/10 gap-1.5 -ml-1">
                     <ExternalLink className="w-3 h-3" /> Read full policy
@@ -664,21 +664,21 @@ function EmployeeView({
                 title: "How Priya automated month-end close",
                 author: "Priya M.", role: "Finance", date: "Mar 5",
                 stat: "4h → 20m", statLabel: "time saved",
-                summary: "Used Gemini + Apps Script to pull actuals, flag variances, and draft the CFO summary automatically.",
+                summary: "Used Helix + Apps Script to pull actuals, flag variances, and draft the CFO summary automatically.",
                 attendees: 45, hasRecap: true
               },
               {
                 title: "AI reply drafts in the CS queue",
                 author: "Marcus T.", role: "Customer Experience", date: "Mar 4",
                 stat: "40+", statLabel: "extra tickets closed",
-                summary: "Gemini drafts reduced copy-paste work and got the team to their best Tuesday throughput ever.",
+                summary: "Helix drafts reduced copy-paste work and got the team to their best Tuesday throughput ever.",
                 attendees: 38, hasRecap: true
               },
               {
-                title: "Vibe-coding Tasker onboarding copy",
+                title: "Vibe-coding field-partner onboarding copy",
                 author: "Sarah K.", role: "Product Ops", date: "Mar 2",
                 stat: "10 min", statLabel: "to first draft",
-                summary: "Prompted Gemini with brand guidelines and ICP notes to generate onboarding email copy in one pass.",
+                summary: "Prompted Helix with brand guidelines and ICP notes to generate onboarding email copy in one pass.",
                 attendees: 29, hasRecap: false
               }
             ].map((win, i) => (
@@ -752,12 +752,12 @@ function LeadershipView({
   };
 
   const allSlackCards = [
-    { type: "positive", avatar: "DO", name: "Derek Ops", channel: "#ai-enablement", time: "2h", text: "The Gemini scheduling tool saved our Ops weekly sync 45 min. Insane 🚀" },
-    { type: "negative", avatar: "JC", name: "Jasmine CX", channel: "#ai-tools-feedback", time: "4h", text: "Can we get AI reply drafts for Tasker support queue too? Only client-side right now is a gap." },
+    { type: "positive", avatar: "DO", name: "Derek Ops", channel: "#ai-enablement", time: "2h", text: "The Helix scheduling tool saved our Ops weekly sync 45 min. Insane 🚀" },
+    { type: "negative", avatar: "JC", name: "Jasmine CX", channel: "#ai-tools-feedback", time: "4h", text: "Can we get AI reply drafts for Field partner support queue too? Only client-side right now is a gap." },
     { type: "idea", avatar: "DT", name: "Dev Team", channel: "via /ai-idea", time: "1d", text: "Auto-tag task categories in the backlog based on user description.", upvotes: 18 },
     { type: "positive", avatar: "PR", name: "Priya Finance", channel: "#ai-wins", time: "30m", text: "Month-end close went from a half-day to literally 20 minutes this cycle. CFO was floored." },
-    { type: "negative", avatar: "TK", name: "Tom K.", channel: "#general", time: "5h", text: "I keep forgetting Gemini is even there. We need reminders or something in our standups." },
-    { type: "positive", avatar: "SK", name: "Sarah K.", channel: "#ai-wins", time: "12h", text: "Vibe-coded an entire Tasker onboarding email sequence. First draft done in under 10min." },
+    { type: "negative", avatar: "TK", name: "Tom K.", channel: "#general", time: "5h", text: "I keep forgetting Helix is even there. We need reminders or something in our standups." },
+    { type: "positive", avatar: "SK", name: "Sarah K.", channel: "#ai-wins", time: "12h", text: "Vibe-coded an entire field-partner onboarding email sequence. First draft done in under 10min." },
   ];
 
   const deptOutcomes = [
@@ -766,14 +766,14 @@ function LeadershipView({
       status: "Progressing", goal: "15% ticket deflection via AI drafts",
       current: 9, targetVal: 15, unit: "%",
       delta: "+3pp MoM", note: "AI draft adoption up in Tier 1 queue — advocate scheduled training this month.",
-      action: "→ Unlock Tasker-side reply draft tooling to close the gap."
+      action: "→ Unlock Partner-side reply draft tooling to close the gap."
     },
     {
       dept: "Engineering", icon: "⚙️", rag: "green",
       status: "On Track", goal: "50% of PRs AI-assisted",
       current: 38, targetVal: 50, unit: "%",
-      delta: "+22% MoM", note: "Augment + Gemini Code Assist both active. PR velocity 2.3× vs. non-users.",
-      action: "→ Consider expanding Augment seats — 22 idle licenses already flagged."
+      delta: "+22% MoM", note: "Forge + Helix Code Assist both active. PR velocity 2.3× vs. non-users.",
+      action: "→ Consider expanding Forge seats — 22 idle licenses already flagged."
     },
     {
       dept: "Finance & Ops", icon: "📊", rag: "green",
@@ -822,7 +822,7 @@ function LeadershipView({
             CEO Executive Pulse
             <Badge variant="outline" className="ml-2 bg-primary/5 text-primary border-primary/20 font-medium">Live Data</Badge>
           </h2>
-          <p className="text-muted-foreground text-sm mt-0.5">Week of Mar 3–7, 2026 · TaskRabbit AI Enablement</p>
+          <p className="text-muted-foreground text-sm mt-0.5">Sample reporting week · Meridian enablement program</p>
         </div>
         {!agentRunning && agentStep === 0 ? (
           <Button onClick={onRunPulse} className="bg-chart-2 hover:bg-chart-2/90 text-white shadow-md group transition-all">
@@ -903,7 +903,7 @@ function LeadershipView({
             </div>
             <ul className="space-y-3">
               {[
-                { icon: "📈", bold: "Active users up 8% MoM", rest: "— 312 → 337 unique Gemini users this month." },
+                { icon: "📈", bold: "Active users up 8% MoM", rest: "— 312 → 337 unique Helix users this month." },
                 { icon: "🏦", bold: "Finance hit 50% regular use", rest: "— first non-Eng team to cross that mark." },
                 { icon: "⚠️", bold: "CX adoption stalled at 34%", rest: "— Marcus T. flagged onboarding friction in #ai-tools-feedback." },
                 { icon: "⏱", bold: "Est. 568 hrs saved this month", rest: "(~$80,000 in labor value)." },
@@ -974,7 +974,7 @@ function LeadershipView({
               <p className="text-2xl font-black tracking-tight leading-none">$15,840<span className="text-sm font-normal text-muted-foreground">/yr</span></p>
             </div>
             <div className="mt-3 flex items-end justify-between gap-2">
-              <p className="text-[11px] text-muted-foreground leading-tight flex-1">22 Augment seats<br />with <strong className="text-foreground">zero activity</strong></p>
+              <p className="text-[11px] text-muted-foreground leading-tight flex-1">22 Forge seats<br />with <strong className="text-foreground">zero activity</strong></p>
               <Button size="sm" variant="outline" className="text-[10px] h-6 px-2 font-semibold border-chart-3/20 text-chart-3 hover:bg-chart-3/10 shrink-0">
                 Reclaim Seats
               </Button>
@@ -1187,7 +1187,7 @@ function LeadershipView({
                 <div className="space-y-2.5">
                   {[
                     { label: "Internal Workflows", detail: "dev tooling, ops automation, reporting", spend: 29700, pct: 67, color: "bg-primary" },
-                    { label: "External / Customer-Facing", detail: "Tasker matching, support reply drafts", spend: 14460, pct: 33, color: "bg-chart-2" },
+                    { label: "External / Customer-Facing", detail: "Supply-side matching, support reply drafts", spend: 14460, pct: 33, color: "bg-chart-2" },
                   ].map((row, i) => (
                     <div key={i}>
                       <div className="flex justify-between items-center mb-1">
@@ -1229,7 +1229,7 @@ function CEOBriefIntro({
               <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary font-medium">
                 CEO Brief Mode
               </Badge>
-              <CardTitle className="text-2xl tracking-tight">A guided walkthrough of the TaskRabbit AI Enablement prototype</CardTitle>
+              <CardTitle className="text-2xl tracking-tight">A guided walkthrough of the Meridian internal AI enablement prototype</CardTitle>
               <CardDescription className="text-sm leading-relaxed">
                 This walkthrough shows the full barbell strategy: bottom-up adoption through the employee hub, and top-down visibility through the leadership dashboard.
               </CardDescription>
@@ -1388,7 +1388,7 @@ function AgentStreamPanel({ step }: { step: number }) {
         </CardHeader>
         <CardContent className="space-y-5">
           <p className="text-[14px] leading-relaxed">
-            <strong className="text-foreground">Adoption is accelerating, but training gaps remain.</strong> Gemini MAU grew 6% this month, largely driven by adoption in Finance and early testing in CX. Token spend remains highly efficient at 61% of budget, indicating we have headroom to scale Augment licenses for engineering.
+            <strong className="text-foreground">Adoption is accelerating, but training gaps remain.</strong> Helix MAU grew 6% this month, largely driven by adoption in Finance and early testing in CX. Token spend remains highly efficient at 61% of budget, indicating we have headroom to scale Forge licenses for engineering.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <div className="bg-card rounded-xl p-4 border border-border shadow-sm">
@@ -1398,7 +1398,7 @@ function AgentStreamPanel({ step }: { step: number }) {
               <ul className="text-[13px] space-y-3">
                 <li className="flex gap-2.5 items-start">
                   <span className="text-chart-3 mt-1 text-[10px]">●</span>
-                  <span className="leading-relaxed"><strong className="font-semibold text-foreground">CX Bot Parity:</strong> Friction flagged around AI reply drafts missing in Tasker support queue (3 complaints).</span>
+                  <span className="leading-relaxed"><strong className="font-semibold text-foreground">CX Bot Parity:</strong> Friction flagged around AI reply drafts missing in Field partner support queue (3 complaints).</span>
                 </li>
                 <li className="flex gap-2.5 items-start">
                   <span className="text-chart-3/50 mt-1 text-[10px]">●</span>
@@ -1446,10 +1446,10 @@ function AgentStreamPanel({ step }: { step: number }) {
         {step >= 1 && (
           <div className="animate-in fade-in slide-in-from-left-2 duration-300">
             <div className="flex items-center gap-2 text-white/90">
-              <span className="text-blue-400">🔌</span> Connecting to Google Workspace Admin API...
+              <span className="text-blue-400">🔌</span> Connecting to Workforce identity admin API...
             </div>
             <div className="pl-6 mt-1.5 space-y-1.5 text-gray-400">
-              <div className="flex gap-2"><span className="text-primary">✓</span> Retrieved Gemini login events: 942 unique users (last 30 days)</div>
+              <div className="flex gap-2"><span className="text-primary">✓</span> Retrieved Helix login events: 942 unique users (last 30 days)</div>
               <div className="flex gap-2"><span className="text-primary">✓</span> Identified 86 first-time users this month</div>
             </div>
           </div>
