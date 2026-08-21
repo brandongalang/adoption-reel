@@ -1,26 +1,26 @@
-# Meridian — internal AI enablement (portfolio prototype)
+# enablement-lab (prototype, Mar 2026)
 
-Next.js prototype for an **internal AI enablement hub**: employee onboarding, tool directory, champion stories, and a leadership-style operating view. All company names, tools (**Helix**, **Forge**, design assistant), and metrics are **fictional** for portfolio use.
+Clickable mock of two screens:
 
-## Contents
+1. An internal AI enablement hub (onboarding, tool directory, champion stories).
+2. An exec “AI pulse” dashboard (adoption, model health, initiative pipeline).
 
-- **Main app** — `src/app/page.tsx`: hub, walkthrough, and synthetic adoption narrative.
-- **Leadership dashboard** — `public/leadership-dashboard.html`: single-file dashboard (also at `/leadership-dashboard.html` when you run Next).
+Fictional company (**Meridian**). Fictional tools (**Helix**, **Forge**). Synthetic metrics.
+
+I sketched this while thinking about how a PE / holdco operator would see AI adoption and ROI across teams. The UI itself is one company, not a live multi-portco roll-up. Built as a portfolio prototype, then anonymized.
+
+Not a product. Not maintained. Not affiliated with an employer.
 
 ## Run
 
-```bash
-bun install   # or npm install
-bun dev       # or npm run dev
+```sh
+bun install
+bun dev
 ```
 
-- Hub: [http://localhost:3000](http://localhost:3000)
-- Static dashboard: [http://localhost:3000/leadership-dashboard.html](http://localhost:3000/leadership-dashboard.html)
+- Hub: http://localhost:3000
+- Dashboard: http://localhost:3000/leadership-dashboard.html
 
 ## Stack
 
-Next.js (App Router), React 19, TypeScript, Tailwind CSS 4, local UI primitives.
-
-## Repository
-
-Source for **`https://github.com/brandongalang/enablement-lab`** — not affiliated with any employer.
+Next.js App Router, React 19, TypeScript, Tailwind CSS 4.
